@@ -1,2 +1,2 @@
-# mdjulia
-This is an experimental repo for molecular dynamics simulation  in Julia.
+# MD-Julia
+This is an experimental repository for basic molecular dynamics simulations in Julia.
