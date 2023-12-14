@@ -11,14 +11,14 @@ println("Precision: ", T)
 
 mass = 4.002602 # A.U.
 temperature = 300.0  # Kelvin
-σ =  2.5238 * FROM_ANG  # Bohr
+σ = 2.5238 * FROM_ANG  # Bohr
 ϵ = 4.7093e-04 * FROM_EV  # Hartree
 r_cutoff = 6.3095 * FROM_ANG # Angstrom
 time_step = 0.5 * FROM_FS  # hbar/Hartree
 
 data = read_frame("He100.xyz")
 lattice = FROM_ANG * data["cell"]
-positions = FROM_ANG * transpose(data["arrays"]["pos"])
+positions = shift_inside_box(FROM_ANG * transpose(data["arrays"]["pos"]), lattice)
 natoms = data["N_atoms"]
 masses = mass * ones(T, (natoms,))
 velocities = generate_random_velocities(temperature, masses)
@@ -35,5 +35,5 @@ integrator = VelocityVerlet{T}(time_step)
 thermostat = BrendsenThermostat{T}(temperature, 100 * time_step)
 system = System{T}(atoms, potential, integrator, thermostat)
 
-simulate!(system, 1_000)
+simulate!(system, 1_00, 10) #, "dump.xyz")
 
