@@ -8,7 +8,7 @@ include("MDIntegrator.jl")
 include("MDThermostat.jl")
 include("MDSystem.jl")
 include("MDParams.jl")
-
+include("MDIO.jl")
 
 using Reexport
 @reexport using
@@ -19,7 +19,8 @@ using Reexport
 	.MDIntegrator,
 	.MDThermostat,
 	.MDSystem,
-	.MDParams
+	.MDParams,
+	.MDIO
 
 export simulate!
 
@@ -35,12 +36,16 @@ function simulate!(
 )
 	system.atoms.forces = calculate_forces(system.potential, system.atoms)
 	print_physical_params(system)
+	fio = open("dump.xyz", "w")
+	dump_xyz(fio, system)
 	for step in 1:num_steps
 		simulate_one_step!(system)
-		if rem(step, output_freq) == 0
+		if step % output_freq == 0
 			print_physical_params(system)
+			dump_xyz(fio, system)
 		end
 	end
+	close(fio)
 end
 
 end
