@@ -7,7 +7,8 @@ export
 	add_dim,
 	zeros_like,
 	temperature_kernel,
-	generate_random_velocities
+	generate_random_velocities,
+	calculate_center_of_mass
 
 add_dim(x::Array) = reshape(x, (size(x)..., 1))
 

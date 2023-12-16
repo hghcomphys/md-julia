@@ -33,19 +33,26 @@ function simulate!(
 	system,
 	num_steps::Integer = 1,
 	output_freq::Integer = 100,
+	filename = nothing,
 )
 	system.atoms.forces = calculate_forces(system.potential, system.atoms)
 	print_physical_params(system)
-	fio = open("dump.xyz", "w")
-	dump_xyz(fio, system)
+	if !isnothing(filename)
+		fio = open(filename, "w")
+		dump_xyz(fio, system)
+	end
 	for step in 1:num_steps
 		simulate_one_step!(system)
 		if step % output_freq == 0
 			print_physical_params(system)
-			dump_xyz(fio, system)
+			if !isnothing(filename)
+				dump_xyz(fio, system)
+			end
 		end
 	end
-	close(fio)
+	if !isnothing(filename)
+		close(fio)
+	end
 end
 
 end

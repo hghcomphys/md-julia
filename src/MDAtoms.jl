@@ -40,7 +40,7 @@ function apply_pbc!(position_differences, lattice)
 end
 
 function calculate_cutoff_masks(distances, r_cutoff)
-	(distances .< r_cutoff) .& (distances .> 0.0)
+	(distances .<= r_cutoff) .& (distances .!= 0.0)
 end
 
 function calculate_distances(atoms::Atoms, atom_index::Integer)
