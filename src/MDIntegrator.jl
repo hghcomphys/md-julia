@@ -39,6 +39,8 @@ function update!(::VelocityVerlet, system)
 	system.atoms.positions = shift_inside_box(new_positions, atoms.lattice)
 
 	new_forces = calculate_forces(system.potential, system.atoms)
+	# new_forces .-= sum(new_forces, dims = 1)  # remove drifting force
+
 	new_velocities = verlet_new_velocities(
 		atoms.velocities, atoms.forces, new_forces, time_step,
 	)

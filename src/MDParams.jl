@@ -63,8 +63,9 @@ function print_physical_params(system)
 		calculate_potential_energy(system),
 		calculate_pressure(system) * TO_KB,
 	)
-	# println(calculate_center_mass_velocity(system))
-	# println(calculate_center_mass_position(system))
+	# println("Vcom: ", calculate_center_mass_velocity(system))
+	# println("Rcom: ", calculate_center_mass_position(system))
+	# println("Drifting force: ", sum(system.atoms.forces, dims = 1))
 end
 
 end
