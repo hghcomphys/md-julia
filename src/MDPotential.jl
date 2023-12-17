@@ -25,13 +25,15 @@ function calculate_energy(potential::LJPotential, atoms)
 	energy = 0.0
 	for atom_index in 1:natoms
 		distances, _ = calculate_distances(atoms, atom_index)
-		energy += sum(
+		energy_per_atom = sum(
 			ifelse.(
 				calculate_cutoff_masks(distances, potential.r_cutoff),
 				calculate_pair_energies(potential, distances),
 				0.0,
 			),
 		)
+		# multi-thread with atomic add 
+		energy += energy_per_atom
 	end
 	0.5 * energy
 end
@@ -46,7 +48,7 @@ end
 function calculate_forces(potential::LJPotential, atoms)
 	natoms = get_natoms(atoms)
 	forces = zeros_like(atoms.positions)
-	for atom_index in 1:natoms
+	Threads.@threads for atom_index in 1:natoms
 		distances, position_differences = calculate_distances(atoms, atom_index)
 		pair_forces = ifelse.(
 			calculate_cutoff_masks(distances, potential.r_cutoff),
