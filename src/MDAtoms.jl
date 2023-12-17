@@ -1,7 +1,5 @@
 module MDAtoms
 
-using LinearAlgebra
-using FieldProperties
 using ..MDUtils
 
 export
@@ -25,7 +23,7 @@ function get_natoms(atoms::Atoms)
 end
 
 function get_volume(atoms::Atoms)
-	prod(diag(atoms.lattice))
+	prod(diagonal(atoms.lattice))
 end
 
 function apply_pbc!(position_differences, lattice)
@@ -52,7 +50,7 @@ function calculate_distances(atoms::Atoms, atom_index::Integer)
 end
 
 function shift_inside_box(positions, lattice)
-	positions .% reshape(diag(lattice), (1, 3))
+	positions .% reshape(diagonal(lattice), (1, 3))
 end
 
 end

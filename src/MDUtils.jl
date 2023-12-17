@@ -6,6 +6,7 @@ using ..MDUnits
 export
 	add_dim,
 	zeros_like,
+	diagonal,
 	temperature_kernel,
 	generate_random_velocities,
 	calculate_center_of_mass
@@ -13,6 +14,8 @@ export
 add_dim(x::Array) = reshape(x, (size(x)..., 1))
 
 zeros_like(x::Array) = zeros(eltype(x), size(x))
+
+diagonal(x::Matrix) = [x[i, i] for i in 1:size(x, 1)]
 
 function temperature_kernel(velocities, masses)
 	natoms = size(masses, 1)
