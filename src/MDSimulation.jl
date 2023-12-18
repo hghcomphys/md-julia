@@ -31,11 +31,11 @@ function simulate!(
 	filename = nothing,
 )
 	system.atoms.forces = calculate_forces(system.potential, system.atoms)
-	print_physical_params(system)
 	if !isnothing(filename)
 		fio = open(filename, "w")
 		dump_xyz(fio, system)
 	end
+	print_physical_params(system)
 	for step in 1:num_steps
 		simulate_one_step!(system.integrator, system)
 		if step % output_freq == 0

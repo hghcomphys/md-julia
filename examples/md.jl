@@ -5,8 +5,9 @@ using .MDSimulation
 
 const T = Float64
 
-println("Molecular Dynamics Simulation in Julia")
-println("Example: Lennard-Jones Potential")
+println("Molecular Dynamics in Julia")
+println("===========================")
+println("Potential: Lennard-Jones")
 println("Precision: ", T)
 
 temperature = 300.0  # Kelvin
@@ -25,6 +26,7 @@ velocities = generate_random_velocities(temperature, masses)
 forces = similar(velocities)
 atoms = Atoms{T}(lattice, positions, velocities, forces, masses)
 println("Number of atoms: ", get_natoms(atoms))
+println("Temperature: ", temperature)
 # println("distances: ", calculate_distances(atoms, 2))
 
 potential = LJPotential{T}(σ, ϵ, r_cutoff)
@@ -35,7 +37,8 @@ potential = LJPotential{T}(σ, ϵ, r_cutoff)
 thermostat = BrendsenThermostat{T}(temperature, 100 * time_step)
 # integrator = VelocityVerlet{T}(time_step, nothing) # NVE
 integrator = VelocityVerlet{T}(time_step, thermostat) # NVT
+println("Integration: ", isnothing(thermostat) ? "NVE" : "NVT")
 system = System{T}(atoms, potential, integrator)
 
-simulate!(system, 1_000, 100) #, "dump.xyz")
+simulate!(system, 1_000, 100, "dump.xyz")
 

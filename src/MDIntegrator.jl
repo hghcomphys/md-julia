@@ -18,10 +18,9 @@ mutable struct VelocityVerlet{T} <: Integrator{T}
 	thermostat::Union{Nothing, Thermostat}
 end
 
-function VelocityVerlet{T}(time_step, thermostat = nothing) where {T <: AbstractFloat}
-	println("Integration: ", isnothing(thermostat) ? "NVE" : "NVT")
-	VelocityVerlet(T(time_step), 0, T(0.0), thermostat)
-end
+VelocityVerlet{T}(
+	time_step, thermostat = nothing,
+) where {T <: AbstractFloat} = VelocityVerlet(T(time_step), 0, T(0.0), thermostat)
 
 function verlet_new_positions(positions, velocities, forces, time_step)
 	@. positions + (velocities + 0.5 * forces * time_step) * time_step
