@@ -9,8 +9,8 @@ println("Molecular Dynamics Simulation in Julia")
 println("Example: Lennard-Jones Potential")
 println("Precision: ", T)
 
-mass = 4.003 * FROM_AMU #  
 temperature = 300.0  # Kelvin
+mass = 4.003 * FROM_AMU
 σ = 2.5238 * FROM_ANG  # Bohr
 ϵ = 4.7093e-04 * FROM_EV  # Hartree
 r_cutoff = 6.3095 * FROM_ANG # Angstrom
@@ -32,9 +32,10 @@ potential = LJPotential{T}(σ, ϵ, r_cutoff)
 # println("energy: ", calculate_energy(potential, atoms))
 # println("forces: ", calculate_forces(potential, atoms))
 
-integrator = VelocityVerlet{T}(time_step)
 thermostat = BrendsenThermostat{T}(temperature, 100 * time_step)
-system = System{T}(atoms, potential, integrator, thermostat)
+# integrator = VelocityVerlet{T}(time_step, nothing) # NVE
+integrator = VelocityVerlet{T}(time_step, thermostat) # NVT
+system = System{T}(atoms, potential, integrator)
 
-simulate!(system, 10_000, 100, "dump.xyz")
+simulate!(system, 1_000, 100) #, "dump.xyz")
 

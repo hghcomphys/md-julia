@@ -11,7 +11,6 @@ mutable struct System{T <: AbstractFloat}
 	atoms::Atoms{T}
 	potential::Potential{T}
 	integrator::Integrator{T}
-	thermostat::Thermostat{T}
 end
 
 end
